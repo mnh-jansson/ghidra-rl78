@@ -73,7 +73,7 @@ jobs:
         j2 data/languages/rl78.slaspec.in > data/languages/rl78.slaspec
 
         # Compile Sleigh files
-        sleigh -a -u
+        sleigh -a -u data/languages
 
         # Prepare directories and files
         mkdir -p tmp/rl78/data/languages
