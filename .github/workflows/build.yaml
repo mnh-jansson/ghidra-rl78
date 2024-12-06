@@ -41,7 +41,7 @@ jobs:
       run: |
         # Install system dependencies
         sudo apt-get update
-        sudo apt-get install -y build-essential zip unzip jinja2-cli python3-venv python3-pip
+        sudo apt-get install -y build-essential zip unzip python3-venv python3-pip
 
     - name: Set up Python virtual environment
       run: |
