@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Download Ghidra release
       uses: carlosperate/download-file-action@v1.0.3
@@ -89,7 +89,7 @@ jobs:
         ls -la rl78.zip
 
     - name: Upload compiled Sleigh artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: rl78-sleigh
         path: rl78.zip
