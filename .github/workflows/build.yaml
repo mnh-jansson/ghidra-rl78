@@ -1,0 +1,112 @@
+name: Ghidra RX Extension Build
+
+env:
+  ghidra-url: https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.0_build/ghidra_11.0_PUBLIC_20231222.zip
+  ghidra-zip-filename: ghidra_11.0_PUBLIC_20231222.zip
+  ghidra-directory: ghidra_11.0_PUBLIC
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types: [ created ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download Ghidra release
+      uses: carlosperate/download-file-action@v1.0.3
+      id: download-ghidra
+      with:
+        file-url: ${{ env.ghidra-url }}
+        file-name: ${{ env.ghidra-zip-filename }}
+
+    - name: Unzip Ghidra
+      uses: TonyBogdanov/zip@1.0
+      with:
+        args: unzip -qq ${{ steps.download-ghidra.outputs.file-path }} -d .
+
+    - name: Setup Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies for Python environment
+      run: |
+        # Install system dependencies
+        sudo apt-get update
+        sudo apt-get install -y build-essential zip unzip python3-venv python3-pip
+
+    - name: Set up Python virtual environment
+      run: |
+        # Create and activate the virtual environment
+        python3 -m venv env
+        . env/bin/activate
+
+        # Install Python dependencies
+        pip install -r requirements.txt
+
+    - name: Set Sleigh path
+      run: |
+        # Set the path to the sleigh executable located in the Ghidra directory
+        export GHIDRA_HOME=$PWD/${{ env.ghidra-directory }}
+        export PATH=$GHIDRA_HOME/support:$PATH
+        echo "GHIDRA_HOME=$GHIDRA_HOME" >> $GITHUB_ENV
+        echo "PATH=$PATH" >> $GITHUB_ENV
+
+    - name: Compile Ghidra Sleigh
+      run: |
+        # Ensure virtual environment is activated
+        . env/bin/activate
+        
+        # Remove previous build artifacts
+        rm -rf tmp
+        rm -f rl78.zip
+
+        # Process the SLASPEC file
+        j2 data/languages/rl78.slaspec.in > data/languages/rl78.slaspec
+
+        # Compile Sleigh files
+        sleigh -a -u data/languages
+
+        # Prepare directories and files
+        mkdir -p tmp/rl78/data/languages
+        touch tmp/rl78/Module.manifest
+        cp data/languages/rl78.{cspec,ldefs,pspec,slaspec} tmp/rl78/data/languages
+
+        # Create the ZIP file
+        cd tmp
+        zip -r ../rl78.zip rl78
+        cd ..
+
+        # List the resulting zip file
+        ls -la rl78.zip
+
+    - name: Upload compiled Sleigh artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: rl78-sleigh
+        path: rl78.zip
+
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'release' }}
+    needs: build
+
+    steps:
+    - name: Download built Sleigh artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: rl78-sleigh
+    - name: Upload Sleigh extension to release
+      uses: skx/github-action-publish-binaries@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: '*.zip'
