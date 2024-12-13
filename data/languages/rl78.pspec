@@ -1,15 +1,211 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <processor_spec>
+  <properties>
+    <property key="assemblyRating:RL78:LE:16:default" value="PLATINUM"/>
+  </properties>
+
+  <!-- Define the program counter -->
   <programcounter register="PC"/>
+
+  <!-- Define segment operations for far pointers -->
   <segmentop space="memory" userop="segment" farpointer="yes">
     <pcode>
-      <input name="base" size="1"/>
-      <input name="inner" size="2"/>
-      <output name="res" size="4"/>
+      <input name="base" size="1"/>  <!-- Segment base -->
+      <input name="inner" size="2"/> <!-- Offset -->
+      <output name="res" size="4"/>  <!-- Full pointer (32-bit far pointer result) -->
       <body><![CDATA[
         res = (zext(base) << 16) + zext(inner);
       ]]></body>
     </pcode>
   </segmentop>
+
+  <default_symbols>
+    <!-- <symbol name="RESET"			address="memory:0000" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTWDTI"    address="memory:0004" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTLVI"			address="memory:0006" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP0"			address="memory:0008" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP1"			address="memory:000a" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP2"			address="memory:000c" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP3"			address="memory:000e" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP4"			address="memory:0010" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP5"			address="memory:0012" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTST2"			address="memory:0014" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSR2"			address="memory:0016" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSRE2"	  address="memory:0018" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTDMA0"		address="memory:001A" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTDMA1"		address="memory:001C" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTST0"			address="memory:001E" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSR0"			address="memory:0020" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSRE0"		address="memory:0022" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTST1"   	address="memory:0024" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSR1"			address="memory:0026" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSRE1"		address="memory:0028" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTIICA0"		address="memory:002A" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM00"		address="memory:002C" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM01"		address="memory:002E" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM02"		address="memory:0030" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM03"		address="memory:0032" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTAD"			address="memory:0034" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTRTC"			address="memory:0036" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTIT"			address="memory:0038" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTKR"			address="memory:003A" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTST3"			address="memory:003C" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSR3"			address="memory:003E" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM13"	  address="memory:0040" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM04"	  address="memory:0042" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM05"	  address="memory:0044" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM06"	  address="memory:0046" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM07"	  address="memory:0048" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP6"	    address="memory:004A" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP7"	    address="memory:004C" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP8"	    address="memory:004E" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP9"	    address="memory:0050" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP10"	    address="memory:0052" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTP11"	    address="memory:0054" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM10"	  address="memory:0056" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM11"	  address="memory:0058" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM12"	  address="memory:005A" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTSRE3"	  address="memory:005C" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTMD"	    address="memory:005E" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTIICA1"	  address="memory:0060" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTFL"	    address="memory:0062" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTDMA2"	  address="memory:0064" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTDMA3"	  address="memory:0066" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM14"	  address="memory:0068" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM15"	  address="memory:006A" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM16"	  address="memory:006C" entry="true" size="2" type="code_ptr"/>
+    <symbol name="INTTM17"	  address="memory:006E" entry="true" size="2" type="code_ptr"/>
+-->
+    <symbol name="P0"      address="memory:FFF00" entry="false"/>
+    <symbol name="P1"      address="memory:FFF01" entry="false"/>
+    <symbol name="P2"      address="memory:FFF02" entry="false"/>
+    <symbol name="P3"      address="memory:FFF03" entry="false"/>
+    <symbol name="P4"      address="memory:FFF04" entry="false"/>
+    <symbol name="P5"      address="memory:FFF05" entry="false"/>
+    <symbol name="P6"      address="memory:FFF06" entry="false"/>
+    <symbol name="P7"      address="memory:FFF07" entry="false"/>
+    <symbol name="P8"      address="memory:FFF08" entry="false"/>
+    <symbol name="P9"      address="memory:FFF09" entry="false"/>
+    <symbol name="P10"     address="memory:FFF0A" entry="false"/>
+    <symbol name="P11"     address="memory:FFF0B" entry="false"/>
+    <symbol name="P12"     address="memory:FFF0C" entry="false"/>
+    <symbol name="P13"     address="memory:FFF0D" entry="false"/>
+    <symbol name="P14"     address="memory:FFF0E" entry="false"/>
+    <symbol name="P15"     address="memory:FFF0F" entry="false"/>
+    <symbol name="SDR00"   address="memory:FFF10" entry="false" size="2"/>
+    <symbol name="SDR01"   address="memory:FFF12" entry="false" size="2"/>
+    <symbol name="SDR12"   address="memory:FFF14" entry="false" size="2"/>
+    <symbol name="SDR13"   address="memory:FFF16" entry="false"/>
+    <symbol name="TDR00"   address="memory:FFF18" entry="false"/>
+    <symbol name="TDR01"   address="memory:FFF1A" entry="false"/>
+    <symbol name="ADCR"    address="memory:FFF1E" entry="false"/>
+    <symbol name="ADCRH"   address="memory:FFF1F" entry="false"/>
+    <symbol name="PM0"     address="memory:FFF20" entry="false"/>
+    <symbol name="PM1"     address="memory:FFF21" entry="false"/>
+    <symbol name="PM2"     address="memory:FFF22" entry="false"/>
+    <symbol name="PM3"     address="memory:FFF23" entry="false"/>
+    <symbol name="PM4"     address="memory:FFF24" entry="false"/>
+    <symbol name="PM5"     address="memory:FFF25" entry="false"/>
+    <symbol name="PM6"     address="memory:FFF26" entry="false"/>
+    <symbol name="PM7"     address="memory:FFF27" entry="false"/>
+    <symbol name="PM8"     address="memory:FFF28" entry="false"/>
+    <symbol name="PM9"     address="memory:FFF29" entry="false"/>
+    <symbol name="PM10"    address="memory:FFF2A" entry="false"/>
+    <symbol name="PM11"    address="memory:FFF2B" entry="false"/>
+    <symbol name="PM12"    address="memory:FFF2C" entry="false"/>
+    <symbol name="PM13"    address="memory:FFF2D" entry="false"/>
+    <symbol name="PM14"    address="memory:FFF2E" entry="false"/>
+    <symbol name="PM15"    address="memory:FFF2F" entry="false"/>
+    <symbol name="ADM0"    address="memory:FFF30" entry="false"/>
+    <symbol name="ADS"     address="memory:FFF31" entry="false"/>
+    <symbol name="ADM1"    address="memory:FFF32" entry="false"/>
+    <symbol name="KRM"     address="memory:FFF37" entry="false"/>
+    <symbol name="EGP0"    address="memory:FFF38" entry="false"/>
+    <symbol name="EGN0"    address="memory:FFF39" entry="false"/>
+    <symbol name="EGP1"    address="memory:FFF3A" entry="false"/>
+    <symbol name="EGN1"    address="memory:FFF3B" entry="false"/>
+    <symbol name="SDR02"   address="memory:FFF44" entry="false"/>
+    <symbol name="SDR03"   address="memory:FFF46" entry="false"/>
+    <symbol name="SDR10"   address="memory:FFF48" entry="false"/>
+    <symbol name="SDR11"   address="memory:FFF4A" entry="false"/>
+    <symbol name="IICA0"   address="memory:FFF50" entry="false"/>
+    <symbol name="IICS0"   address="memory:FFF51" entry="false"/>
+    <symbol name="IICF0"   address="memory:FFF52" entry="false"/>
+    <symbol name="IICA1"   address="memory:FFF54" entry="false"/>
+    <symbol name="IICS1"   address="memory:FFF55" entry="false"/>
+    <symbol name="IICF1"   address="memory:FFF56" entry="false"/>
+    <symbol name="TDR02"   address="memory:FFF64" entry="false"/>
+    <symbol name="TDR03"   address="memory:FFF66" entry="false"/>
+    <symbol name="TDR04"   address="memory:FFF68" entry="false"/>
+    <symbol name="TDR05"   address="memory:FFF6A" entry="false"/>
+    <symbol name="TDR06"   address="memory:FFF6C" entry="false"/>
+    <symbol name="TDR07"   address="memory:FFF6E" entry="false"/>
+    <symbol name="TDR10"   address="memory:FFF70" entry="false"/>
+    <symbol name="TDR11"   address="memory:FFF72" entry="false"/>
+    <symbol name="TDR12"   address="memory:FFF74" entry="false"/>
+    <symbol name="TDR13"   address="memory:FFF76" entry="false"/>
+    <symbol name="TDR14"   address="memory:FFF78" entry="false"/>
+    <symbol name="TDR15"   address="memory:FFF7A" entry="false"/>
+    <symbol name="TDR16"   address="memory:FFF7C" entry="false"/>
+    <symbol name="TDR17"   address="memory:FFF7E" entry="false"/>
+    <symbol name="ITMC"    address="memory:FFF90" entry="false"/>
+    <symbol name="SEC"     address="memory:FFF92" entry="false"/>
+    <symbol name="MIN"     address="memory:FFF93" entry="false"/>
+    <symbol name="HOUR"    address="memory:FFF94" entry="false"/>
+    <symbol name="WEEK"    address="memory:FFF95" entry="false"/>
+    <symbol name="DAY"     address="memory:FFF96" entry="false"/>
+    <symbol name="MONTH"   address="memory:FFF97" entry="false"/>
+    <symbol name="YEAR"    address="memory:FFF98" entry="false"/>
+    <symbol name="SUBCUD"  address="memory:FFF99" entry="false"/>
+    <symbol name="ALARMWM" address="memory:FFF9A" entry="false"/>
+    <symbol name="ALARMWH" address="memory:FFF9B" entry="false"/>
+    <symbol name="ALARMWW" address="memory:FFF9C" entry="false"/>
+    <symbol name="RTCC0"   address="memory:FFF9D" entry="false"/>
+    <symbol name="RTCC1"   address="memory:FFF9E" entry="false"/>
+    <symbol name="CMC"     address="memory:FFFA0" entry="false"/>
+    <symbol name="CSC"     address="memory:FFFA1" entry="false"/>
+    <symbol name="OSTC"    address="memory:FFFA2" entry="false"/>
+    <symbol name="OSTS"    address="memory:FFFA3" entry="false"/>
+    <symbol name="CKC"     address="memory:FFFA4" entry="false"/>
+    <symbol name="CKS0"    address="memory:FFFA5" entry="false"/>
+    <symbol name="CKS1"    address="memory:FFFA6" entry="false"/>
+    <symbol name="RESF"    address="memory:FFFA8" entry="false"/>
+    <symbol name="LVIM"    address="memory:FFFA9" entry="false"/>
+    <symbol name="LVIS"    address="memory:FFFAA" entry="false"/>
+    <symbol name="WDTE"    address="memory:FFFAB" entry="false"/>
+    <symbol name="CRCIN"   address="memory:FFFAC" entry="false"/>
+    <symbol name="DSA0"    address="memory:FFFB0" entry="false"/>
+    <symbol name="DSA1"    address="memory:FFFB1" entry="false"/>
+    <symbol name="DRA0"    address="memory:FFFB2" entry="false"/>
+    <symbol name="DRA1"    address="memory:FFFB4" entry="false"/>
+    <symbol name="DBC0"    address="memory:FFFB6" entry="false"/>
+    <symbol name="DBC1"    address="memory:FFFB8" entry="false"/>
+    <symbol name="DMC0"    address="memory:FFFBA" entry="false"/>
+    <symbol name="DMC1"    address="memory:FFFBB" entry="false"/>
+    <symbol name="DRC0"    address="memory:FFFBC" entry="false"/>
+    <symbol name="DRC1"    address="memory:FFFBD" entry="false"/>
+    <symbol name="IF2"     address="memory:FFFD0" entry="false"/>
+    <symbol name="IF3"     address="memory:FFFD2" entry="false"/>
+    <symbol name="MK2"     address="memory:FFFD4" entry="false"/>
+    <symbol name="MK3"     address="memory:FFFD6" entry="false"/>
+    <symbol name="PR02"    address="memory:FFFD8" entry="false"/>
+    <symbol name="PR03"    address="memory:FFFDA" entry="false"/>
+    <symbol name="PR12"    address="memory:FFFDC" entry="false"/>
+    <symbol name="PR13"    address="memory:FFFDE" entry="false"/>
+    <symbol name="IF0"     address="memory:FFFE0" entry="false"/>
+    <symbol name="IF1"     address="memory:FFFE2" entry="false"/>
+    <symbol name="MK0"     address="memory:FFFE4" entry="false"/>
+    <symbol name="MK1"     address="memory:FFFE6" entry="false"/>
+    <symbol name="PR00"    address="memory:FFF30" entry="false"/>
+    <symbol name="PR01"    address="memory:FFF30" entry="false"/>
+    <symbol name="PR00"    address="memory:FFF30" entry="false"/>
+    <symbol name="PR10"    address="memory:FFFEC" entry="false"/>
+    <symbol name="PR11"    address="memory:FFFEE" entry="false"/>
+    <symbol name="MDAL"    address="memory:FFFF0" entry="false"/>
+    <symbol name="MDAH"    address="memory:FFFF2" entry="false"/>
+    <symbol name="MDBH"    address="memory:FFFF4" entry="false"/>
+    <symbol name="MDBL"    address="memory:FFFF6" entry="false"/>
+    <symbol name="PMC"     address="memory:FFFFE" entry="false"/>
+  </default_symbols>
 </processor_spec>
