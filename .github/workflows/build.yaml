@@ -89,7 +89,7 @@ jobs:
         ls -la rl78.zip
 
     - name: Upload compiled Sleigh artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: rl78-sleigh
         path: rl78.zip
