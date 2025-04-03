@@ -22,3 +22,4 @@ Ensure Ghidra's `sleigh` utility is in your PATH and then execute:
 ```
 
 The generated `rl78.zip` could then be extracted to `Ghidra/Processors`.
+
